@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.bg_landing_1{
+  background-repeat: no-repeat;
+  background-position-x: left;
+  background-position-y: top 43px;
+  background-size: 444.3% 22.8%;
+}
