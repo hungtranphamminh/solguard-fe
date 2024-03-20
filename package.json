@@ -13,11 +13,17 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.20",
     "@mui/material-next": "^6.0.0-alpha.117",
+    "@rainbow-me/rainbowkit": "^2.0.2",
+    "@tanstack/react-query": "^5.28.4",
     "ace-builds": "^1.32.0",
+    "apexcharts": "^3.48.0",
+    "flowbite": "^2.3.0",
     "next": "14.0.3",
     "react": "^18",
     "react-ace": "^10.1.0",
     "react-dom": "^18",
+    "viem": "2.x",
+    "wagmi": "^2.5.11",
     "zustand": "^4.4.7"
   },
   "devDependencies": {

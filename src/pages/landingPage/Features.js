@@ -3,7 +3,7 @@ import bug from "@/assets/images/landing/bug.svg";
 import web from "@/assets/images/landing/web.svg";
 import www from "@/assets/images/landing/www.svg";
 import plus from "@/assets/images/landing/plus.svg";
-import bg from "@/assets/images/landing/curves.svg";
+import bg from "@/assets/images/solshield/bg.png";
 import wavebg from "@/assets/images/landing/wave.webp";
 
 export default function Features() {
@@ -77,8 +77,9 @@ export default function Features() {
       <div
         className="w-full pt-[65px] pb-[81px]  text-center"
         style={{
-          background: `url(${wavebg.src}) no-repeat`,
+          background: `url(${bg.src}) no-repeat`,
           backgroundSize: "cover",
+          backgroundPosition: "bottom",
         }}
       >
         <p className="max-w-[862px] mx-auto text-white font-normal text-[30px] leading-[130%]">

@@ -3,6 +3,8 @@ import dynamic from "next/dynamic";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import bg from "@/assets/images/solshield/bg.png";
+
 const CodeEditorNoSSR = dynamic(
   () => import("@/components/CodeEditor/Editor"),
   { ssr: false }
@@ -26,7 +28,13 @@ export default function MainTool() {
 
   return (
     <>
-      <div className="bg-[#020217] h-[calc(100vh-90px)] w-full flex items-stretch">
+      <div
+        className=" h-[calc(100vh-90px)] w-full flex items-stretch mt-24"
+        style={{
+          background: `url(${bg.src})`,
+          backgroundSize: "cover",
+        }}
+      >
         {/* option bar */}
         <div className="w-[450px] h-full text-white flex justify-between flex-col">
           <div className="flex flex-col w-full justify-start items-center">
