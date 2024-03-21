@@ -7,7 +7,7 @@ import {
   getDefaultConfig,
 } from "@rainbow-me/rainbowkit";
 import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
-import { goerli, mainnet } from "wagmi/chains";
+import { goerli, mainnet, bscTestnet } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 
@@ -17,7 +17,7 @@ const config = getDefaultConfig({
   appName: "RainbowKit demo",
   projectId: "YOUR_PROJECT_ID",
   wallets: [...wallets],
-  chains: [mainnet, goerli],
+  chains: [mainnet, goerli, bscTestnet],
   ssr: false,
 });
 
