@@ -1,5 +1,5 @@
 "use client";
-import bg from "@/assets/images/solshield/bg.png";
+import bg from "@/images/solshield/bg.png";
 import InstallShield from "@/components/solShield/Download";
 import Features from "@/components/solShield/Features";
 import HeadNav from "@/components/solShield/HeadNav";

@@ -1,5 +1,5 @@
 "use client";
-import bg from "@/assets/images/solshield/bg.png";
+import bg from "@/images/solshield/bg.png";
 import Portfolio from "@/components/portfolio/Portfolio";
 
 export default function PortfolioPage() {

@@ -1,9 +1,8 @@
 "use client";
 
-import descbg from "@/assets/images/landing/hero-bg-mob.png";
 import Product from "./Product";
 import { useState } from "react";
-import bg from "@/assets/images/solshield/bg.png";
+import bg from "@/images/solshield/bg.png";
 
 const PRODUCTS = [
   {

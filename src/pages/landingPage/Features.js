@@ -3,7 +3,7 @@ import bug from "@/assets/images/landing/bug.svg";
 import web from "@/assets/images/landing/web.svg";
 import www from "@/assets/images/landing/www.svg";
 import plus from "@/assets/images/landing/plus.svg";
-import bg from "@/assets/images/solshield/bg.png";
+import bg from "@/images/solshield/bg.png";
 import wavebg from "@/assets/images/landing/wave.webp";
 
 export default function Features() {

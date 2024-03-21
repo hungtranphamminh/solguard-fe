@@ -1,8 +1,8 @@
 import src1 from "@/assets/images/solshield/scr1.png";
 import src2 from "@/assets/images/solshield/scr2.png";
 import Image from "next/image";
-import bgimg1 from "@/assets/images/solShield/bgimg.png";
-import bgimg2 from "@/assets/images/solShield/bgimg2.png";
+import bgimg1 from "@/images/solShield/bgimg.png";
+import bgimg2 from "@/images/solShield/bgimg2.png";
 
 export default function InstallShield() {
   return (

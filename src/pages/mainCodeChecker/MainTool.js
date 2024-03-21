@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import bg from "@/assets/images/solshield/bg.png";
+import bg from "@/images/solshield/bg.png";
 
 const CodeEditorNoSSR = dynamic(
   () => import("@/components/CodeEditor/Editor"),
