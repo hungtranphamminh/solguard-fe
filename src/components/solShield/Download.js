@@ -25,7 +25,7 @@ export default function InstallShield() {
           />
           <div
             style={{
-              background: `url('/images/solShield/bgimg.png')`,
+              background: `url('/images/solshield/bgimg.png')`,
               backgroundSize: "contain",
               backgroundRepeat: "no-repeat",
             }}
@@ -33,7 +33,7 @@ export default function InstallShield() {
           ></div>
           <div
             style={{
-              background: `url('/images/solShield/bgimg2.png')`,
+              background: `url('/images/solshield/bgimg2.png')`,
               backgroundSize: "contain",
               backgroundRepeat: "no-repeat",
             }}
