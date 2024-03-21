@@ -22,14 +22,14 @@ export default function HeadNav({ currentSec, setSec }) {
         <div className="flex items-center gap-6 text-white font-semibold text-xl">
           {currentSec === 0 ? (
             <button className=" pb-2 border-b-4 border-b-teal-400 shadow-teal-300">
-              About
+              Download
             </button>
           ) : (
             <button
               className=" pb-2 border-b-4 border-b-transparent"
               onClick={() => setSec(0)}
             >
-              About
+              Download
             </button>
           )}
           {currentSec === 1 ? (

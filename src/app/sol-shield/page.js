@@ -1,6 +1,7 @@
 "use client";
 import bg from "@/assets/images/solshield/bg.png";
-import About from "@/components/solShield/About";
+import InstallShield from "@/components/solShield/Download";
+import Features from "@/components/solShield/Features";
 import HeadNav from "@/components/solShield/HeadNav";
 import { useState } from "react";
 export default function SolShield() {
@@ -15,7 +16,8 @@ export default function SolShield() {
     >
       <HeadNav currentSec={currentSec} setSec={setSec} />
       <div className="w-full flex flex-col items-start h-[800px] overflow-y-auto">
-        {currentSec === 0 && <About />}
+        {currentSec === 1 && <Features />}
+        {currentSec === 0 && <InstallShield />}
       </div>
     </div>
   );

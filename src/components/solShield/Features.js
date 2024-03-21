@@ -5,7 +5,7 @@ import main1bg from "@/assets/images/solshield/main1bg.png";
 import extra from "@/assets/images/solshield/extra.png";
 import portfolio from "@/assets/images/solshield/portfolio.png";
 
-export default function About() {
+export default function Features() {
   return (
     <div className="w-full mx-auto max-w-[1000px] mt-0">
       {/* get started */}
@@ -54,7 +54,7 @@ export default function About() {
             <Image src={main1bg} width={500} className="rounded-[10px]" />
           </div>
         </div>
-        <div className="max-w-[490px]">
+        <div className="max-w-[490px] relative -left-28">
           <div className="font-bold text-[24px] leading-[36px] bg-gradient-to-r from-green-200 to-blue-500 bg-clip-text text-transparent">
             Aware of potential threat with SolAnalyzer
           </div>
@@ -68,7 +68,7 @@ export default function About() {
 
       {/* another layer  */}
       <div className="flex items-center mt-2">
-        <div className="max-w-[490px]">
+        <div className="max-w-[490px] relative -right-32">
           <div className="font-bold text-[24px] leading-[36px] bg-gradient-to-r from-green-200 to-blue-500 bg-clip-text text-transparent">
             Built-in extra layer of security
           </div>
