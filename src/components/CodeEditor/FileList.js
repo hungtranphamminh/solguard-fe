@@ -1,4 +1,4 @@
-import { useCodeStore } from "@/stores/useCart";
+import { useCodeStore } from "@/stores/useCode";
 import Sol from "@/assets/images/sol.svg";
 import Image from "next/image";
 export default function FileList() {

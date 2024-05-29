@@ -3,7 +3,13 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import HeadBar from "@/components/Header/HeadBar";
 import Provider from "./provider";
+import dynamic from "next/dynamic";
+import "react-toastify/dist/ReactToastify.css";
+import "./loaderStyle.css";
+
 const inter = Inter({ subsets: ["latin"] });
+
+const NoSSR = dynamic(() => import("./provider"), { ssr: false });
 
 export const metadata = {
   title: "SolGuard",
@@ -15,12 +21,12 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <div className="w-full relative">
-          <Provider>
+          <NoSSR>
             <>
               <HeadBar />
               {children}
             </>
-          </Provider>
+          </NoSSR>
         </div>
       </body>
     </html>

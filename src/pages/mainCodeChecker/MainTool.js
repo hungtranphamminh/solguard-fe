@@ -1,35 +1,178 @@
 "use client";
 import dynamic from "next/dynamic";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import bg from "@/images/solshield/bg.png";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 const CodeEditorNoSSR = dynamic(
   () => import("@/components/CodeEditor/Editor"),
   { ssr: false }
 );
-import { useCodeStore } from "@/stores/useCart";
+import { useCodeStore } from "@/stores/useCode";
 import FileList from "@/components/CodeEditor/FileList";
 import FileListEditor from "@/components/CodeEditor/FileListEditor";
 import AnalysisResult from "@/components/ErrorDisplay/ErrorDisplay";
+import { useEffect } from "react";
 
 export default function MainTool() {
-  const { contractCode, loadCode, changeProcess } = useCodeStore();
+  const searchParams = useSearchParams();
+  const recordId = searchParams.get("id");
+  const [status, setStatus] = useState("");
+
+  const [inputContractAdr, setInputContractAdr] = useState("");
+  const [inputChainId, setInputChainId] = useState("");
+
+  const [uploadMethod, setUploadMethod] = useState("file");
+
+  const { contractCode, loadCode, changeProcess, updateRes } = useCodeStore();
+
+  const [isDone, setIsDone] = useState(true);
 
   const handleFileUpload = async (event) => {
     if (!event.target.files || event.target.files.length === 0) {
-      return; // User canceled file selection
+      return;
     }
-
-    loadCode(event.target.files[0]);
+    loadCode(event.target.files[0], false);
     changeProcess(1);
   };
+
+  const analyzeCode = async () => {
+    setIsDone(false);
+    setStatus("Analyzing smart contract");
+    try {
+      if (uploadMethod === "file")
+        await fetch(process.env.HOST_URL + "/api/analysis/file", {
+          method: "POST",
+          headers: {
+            "Content-Type": "form-data",
+          },
+          body: JSON.stringify({
+            file: contractCode[0].file,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            updateRes(data.data);
+            setIsDone(true);
+            changeProcess(2);
+          });
+      else {
+        await fetch(
+          process.env.NEXT_PUBLIC_HOST_URL + "/api/analysis/address",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "ngrok-skip-browser-warning": "true",
+            },
+            body: JSON.stringify({
+              address: inputContractAdr,
+              chainid: inputChainId,
+              wallet_address: window.ethereum.selectedAddress,
+            }),
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("data result:", data);
+            updateRes(data.data);
+            setIsDone(true);
+            changeProcess(2);
+          });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchAnalysisRecord = async (id) => {
+    setStatus("Fetching analysis record");
+    try {
+      const fetchParams =
+        "?id=" + id + "&wallet_address=" + window.ethereum.selectedAddress;
+      await fetch(
+        process.env.NEXT_PUBLIC_HOST_URL + "/api/user/history" + fetchParams,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          updateRes(data.data);
+          changeProcess(2);
+          setIsDone(true);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchContract = async (prefetch) => {
+    console.log(
+      "fetching address with params: ",
+      inputContractAdr,
+      inputChainId
+    );
+    try {
+      setIsDone(false);
+      setStatus("Fetching contract code");
+      let fetchParams = "";
+
+      console.log("prefetch: ", prefetch);
+
+      if (prefetch !== null) {
+        fetchParams =
+          "?address=" +
+          searchParams.get("contract_address") +
+          "&chainid=" +
+          searchParams.get("chainid");
+      } else {
+        fetchParams =
+          "?address=" + inputContractAdr + "&chainid=" + inputChainId;
+      }
+
+      await fetch(
+        process.env.NEXT_PUBLIC_HOST_URL + "/api/source_code" + fetchParams,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      )
+        .then((res) => {
+          console.log("res: ", res);
+          if (res.ok) return res.json();
+        })
+        .then((data) => {
+          console.log("data: ", data);
+          loadCode(data.data.content[0], true);
+          changeProcess(1);
+          setUploadMethod("address");
+          if (prefetch) fetchAnalysisRecord(recordId);
+          else setIsDone(true);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    console.log("main url is: ", process.env.NEXT_PUBLIC_HOST_URL);
+    if (recordId) {
+      fetchContract(true);
+    }
+  }, []);
 
   return (
     <>
       <div
-        className=" h-[calc(100vh-90px)] w-full flex items-stretch mt-24"
+        className=" h-[calc(100vh-97px)] w-full flex items-stretch mt-24"
         style={{
           background: `url(${bg.src})`,
           backgroundSize: "cover",
@@ -70,47 +213,53 @@ export default function MainTool() {
                     <input
                       type="text"
                       className="ml-2 border rounded-md border-[#020217]"
+                      value={inputContractAdr}
+                      onChange={(e) => setInputContractAdr(e.target.value)}
                     ></input>
                   </div>
 
                   <div className="flex items-center justify-between w-full mt-2">
                     <div>ChainID:</div>
-                    <select id="cars" name="chainId">
-                      <option value="Ethereum Mainnet">Ethereum Mainnet</option>
-                      <option value="Sepolia Tesnet">Sepolia Tesnet</option>
-                    </select>
+                    <input
+                      type="text"
+                      value={inputChainId}
+                      onChange={(e) => setInputChainId(e.target.value)}
+                      className="ml-2 border rounded-md border-[#020217]"
+                    ></input>
                   </div>
 
-                  <button className="mt-4 bg-[#011635] w-full py-[6px] text-white rounded-md">
+                  <button
+                    className="mt-4 bg-[#011635] w-full py-[6px] text-white rounded-md"
+                    onClick={() => fetchContract(null)}
+                  >
                     Retrieve Contract Code
                   </button>
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex flex-col w-full justify-start items-center mb-9 ">
-            <div className="mt-6 mb-4 font-bold text-2xl">Analysis Option</div>
-            <div className="w-[400px] bg-white flex flex-col pb-10 text-[#011635] items-center justify-center pt-5">
-              <div className="w-full px-4 font-bold text-xl">Tools</div>
-              <div className="w-full px-6">
-                <FormGroup>
-                  <FormControlLabel control={<Checkbox />} label="Mythril" />
-                  <FormControlLabel control={<Checkbox />} label="Slither" />
-                  <FormControlLabel control={<Checkbox />} label="Securify" />
-                  <FormControlLabel control={<Checkbox />} label="All" />
-                </FormGroup>
-              </div>
-              <div className="mt-2 text-sm px-2 text-[#555463]">
-                Note: Selecting numerous tools will result in a longer analysis
-                time.
-              </div>
-            </div>
-          </div>
         </div>
         {/* main code editor */}
-        <div className="grow h-full flex flex-col py-9">
+        <div className="grow h-full flex flex-col py-9 relative">
+          {!isDone && (
+            <div className=" absolute z-50 bg-black w-full h-full top-0 left-0 bg-opacity-60">
+              <div className="w-full h-full">
+                <div className="m-auto mt-[20vh] w-[300px] flex flex-col items-center justify-center">
+                  <div className="relative h-[100px] w-[100px] ">
+                    <div id="preloader">
+                      <div id="loader"></div>
+                    </div>
+                  </div>
+                  {/* state */}
+                  <div className="text-white font-medium text-2xl text-center mt-6">
+                    {status}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           <FileListEditor />
-          <div className=" w-full h-[600px]">
+          <div className=" w-full h-[600px] relative">
             <CodeEditorNoSSR contractCode={contractCode[0].textContent} />
           </div>
           <div className="bg-[#24292e] w-full flex flex-col text-white border-t items-center">
@@ -125,16 +274,16 @@ export default function MainTool() {
             <div className="w-full flex justify-end mt-6">
               <button
                 className="px-[12px] py-[8px] font-bold bg-teal-400"
-                onClick={() => changeProcess(2)}
+                onClick={() => analyzeCode()}
+
+                // onClick={() => changeProcess(2)}
               >
                 Check code
               </button>
             </div>
-            <div className="w-full flex justify-end mt-2">1/3 scans left</div>
           </div>
         </div>
         {/* result */}
-
         <AnalysisResult />
       </div>
     </>
