@@ -172,7 +172,7 @@ export default function MainTool() {
   return (
     <>
       <div
-        className=" h-[calc(100vh-97px)] w-full flex items-stretch mt-24"
+        className=" h-[calc(100vh-61px)] w-full flex items-stretch mt-[61px]"
         style={{
           background: `url(${bg.src})`,
           backgroundSize: "cover",

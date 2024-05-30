@@ -5,16 +5,24 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Link from "next/link";
 import { useAccount } from "wagmi";
 import { useEffect } from "react";
-import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 
 export default function HeadBar() {
   const account = useAccount();
+  const pathName = usePathname();
+
   useEffect(() => {
     console.log("login trigger", account);
     if (account.address) {
       loginPlatform();
     }
   }, [account]);
+
+  const getHeaderStyle = (currentPath) => {
+    if (currentPath === pathName) {
+      return "text-teal-500 border-teal-500 font-bold ";
+    } else return "text-slate-400 border-transparent ";
+  };
 
   const loginPlatform = async () => {
     try {
@@ -44,7 +52,7 @@ export default function HeadBar() {
 
   return (
     <div className="w-full bg-white text-[#0B1F41] border-b-white fixed top-0 left-0 z-[100]">
-      <div className="pr-[30px] pl-[30px] flex items-center justify-between gap-10 w-full  py-[16px] sticky top-0 left-0">
+      <div className="pr-[30px] pl-[30px] flex items-center justify-between gap-10 w-full sticky top-0 left-0">
         <Link
           className="flex  items-center justify-start gap-4"
           href={"/landing"}
@@ -66,18 +74,35 @@ export default function HeadBar() {
         <div className="flex grow items-center justify-between">
           <div className="flex items-center justify-start gap-5">
             <Link
-              className="px-2 py-4 font-semibold text-[#0B1F41]"
+              className={`px-2  transition-all duration-300 py-4  border-b-4 font-medium ${getHeaderStyle(
+                "/code-checker"
+              )}`}
               href={"/code-checker"}
             >
               SolAnalyzer
             </Link>
-            <Link className="px-2 py-4 font-semibold" href={"/sol-shield"}>
+            <Link
+              className={`px-2 py-4 transition-all duration-300 border-b-4 font-medium ${getHeaderStyle(
+                "/sol-shield"
+              )}`}
+              href={"/sol-shield"}
+            >
               SolShield
             </Link>
-            {/* <Link className="px-2 py-4 font-semibold" href={"/"}>
+            <Link
+              className={`px-2 py-4 transition-all duration-300 border-b-4 font-medium ${getHeaderStyle(
+                "/documents"
+              )}`}
+              href={"/"}
+            >
               Docs
-            </Link> */}
-            <Link className="px-2 py-4 font-semibold" href={"/"}>
+            </Link>
+            <Link
+              className={`px-2 py-4 transition-all duration-300 border-b-4 font-medium ${getHeaderStyle(
+                "/about-us"
+              )}`}
+              href={"/"}
+            >
               About Us
             </Link>
           </div>
@@ -85,7 +110,7 @@ export default function HeadBar() {
           <div className="flex items-center justify-end gap-5">
             {account.address && (
               <>
-                <Link className="px-2 py-4 font-semibold" href={"/portfolio"}>
+                <Link className={`px-2 py-4 font-semibold`} href={"/portfolio"}>
                   History
                 </Link>
                 <button
